@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LLM API 测试台</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div>
+            <h1>LLM API 测试台</h1>
+            <p>纯静态 OpenAI-Compatible 接口调试工具</p>
+          </div>
+        </div>
+        <div class="top-actions">
+          <button class="ghost-button" id="loadExampleButton" type="button">载入示例</button>
+          <button class="ghost-button" id="resetButton" type="button">重置</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <section class="request-panel" aria-label="请求配置">
+          <div class="panel-heading">
+            <div>
+              <h2>请求</h2>
+              <p>填写 endpoint、模型和 prompt 后即可直接从浏览器发起测试。</p>
+            </div>
+            <div class="mode-pill">
+              <span id="saveStateDot"></span>
+              <strong id="saveStateText">本地保存</strong>
+            </div>
+          </div>
+
+          <form id="requestForm" class="control-grid">
+            <label class="field span-2">
+              <span>API Base URL</span>
+              <input id="baseUrl" name="baseUrl" autocomplete="url" placeholder="https://api.example.com/v1">
+            </label>
+
+            <label class="field">
+              <span>接口路径</span>
+              <input id="endpointPath" name="endpointPath" placeholder="/chat/completions">
+            </label>
+
+            <label class="field">
+              <span>模型</span>
+              <input id="model" name="model" list="modelOptions" placeholder="gpt-4o-mini">
+              <datalist id="modelOptions">
+                <option value="gpt-4o-mini"></option>
+                <option value="gpt-4.1-mini"></option>
+                <option value="claude-3-5-sonnet"></option>
+                <option value="deepseek-chat"></option>
+                <option value="qwen-plus"></option>
+              </datalist>
+            </label>
+
+            <label class="field span-2">
+              <span>API Key</span>
+              <div class="secret-row">
+                <input id="apiKey" name="apiKey" type="password" autocomplete="off" placeholder="sk-...">
+                <button class="icon-button" id="toggleKeyButton" type="button" title="显示或隐藏密钥" aria-label="显示或隐藏密钥">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+            </label>
+
+            <label class="field">
+              <span>超时</span>
+              <div class="inline-input">
+                <input id="timeout" name="timeout" type="number" min="1" max="300" step="1">
+                <span>秒</span>
+              </div>
+            </label>
+
+            <label class="field">
+              <span>max_tokens</span>
+              <input id="maxTokens" name="maxTokens" type="number" min="1" step="1">
+            </label>
+
+            <label class="field">
+              <span>temperature</span>
+              <input id="temperature" name="temperature" type="number" min="0" max="2" step="0.1">
+            </label>
+
+            <label class="field">
+              <span>reasoning_effort</span>
+              <select id="reasoningEffort" name="reasoningEffort">
+                <option value="">不发送</option>
+                <option value="low">low</option>
+                <option value="medium">medium</option>
+                <option value="high">high</option>
+              </select>
+            </label>
+
+            <label class="field">
+              <span>响应模式</span>
+              <select id="stream" name="stream">
+                <option value="false">普通响应</option>
+                <option value="true">Stream</option>
+              </select>
+            </label>
+
+            <label class="field switch-field">
+              <input id="rememberKey" name="rememberKey" type="checkbox">
+              <span>在本机浏览器保存 API Key</span>
+            </label>
+
+            <label class="field span-2">
+              <span>System Prompt</span>
+              <textarea id="systemPrompt" name="systemPrompt" rows="3" placeholder="你是一个严谨、简洁的助手。"></textarea>
+            </label>
+
+            <label class="field span-2">
+              <span>User Prompt</span>
+              <textarea id="userPrompt" name="userPrompt" rows="7" placeholder="写下你要测试的输入..."></textarea>
+            </label>
+
+            <label class="field span-2">
+              <span>额外 JSON 参数</span>
+              <textarea id="extraJson" name="extraJson" rows="4" spellcheck="false" placeholder='例如：{"top_p":0.9,"presence_penalty":0}'></textarea>
+            </label>
+
+            <div class="form-actions span-2">
+              <button class="primary-button" id="sendButton" type="submit">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7Z"></path><path d="M22 2 11 13"></path></svg>
+                发送请求
+              </button>
+              <button class="secondary-button" id="abortButton" type="button" disabled>
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2"></rect></svg>
+                中断
+              </button>
+              <button class="secondary-button" id="modelsButton" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M4 12h16"></path><path d="M4 17h10"></path></svg>
+                获取模型
+              </button>
+              <button class="secondary-button" id="copyCurlButton" type="button">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 17 3 12l5-5"></path><path d="m16 7 5 5-5 5"></path><path d="m14 4-4 16"></path></svg>
+                复制 curl
+              </button>
+            </div>
+          </form>
+        </section>
+
+        <section class="result-panel" aria-label="响应结果">
+          <div class="panel-heading result-heading">
+            <div>
+              <h2>响应</h2>
+              <p id="statusLine">等待请求</p>
+            </div>
+            <div class="result-actions">
+              <button class="icon-button" id="copyResponseButton" type="button" title="复制响应" aria-label="复制响应">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+              </button>
+              <button class="icon-button" id="clearResponseButton" type="button" title="清空响应" aria-label="清空响应">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18"></path><path d="M8 6V4h8v2"></path><path d="m19 6-1 14H6L5 6"></path></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="metric-strip">
+            <div>
+              <span>状态</span>
+              <strong id="metricStatus">-</strong>
+            </div>
+            <div>
+              <span>耗时</span>
+              <strong id="metricTime">-</strong>
+            </div>
+            <div>
+              <span>输出字符</span>
+              <strong id="metricChars">0</strong>
+            </div>
+          </div>
+
+          <div class="tabs" role="tablist" aria-label="响应视图">
+            <button class="tab-button active" data-tab="answer" type="button">内容</button>
+            <button class="tab-button" data-tab="raw" type="button">原始数据</button>
+            <button class="tab-button" data-tab="request" type="button">请求体</button>
+          </div>
+
+          <div class="tab-content active" id="tab-answer">
+            <pre id="answerOutput" class="output-block">响应内容会显示在这里。</pre>
+          </div>
+          <div class="tab-content" id="tab-raw">
+            <pre id="rawOutput" class="output-block">原始 JSON 或 SSE 数据会显示在这里。</pre>
+          </div>
+          <div class="tab-content" id="tab-request">
+            <pre id="requestOutput" class="output-block">发送前会在这里预览请求体。</pre>
+          </div>
+
+          <aside class="info-band">
+            <div>
+              <strong>CORS 提醒</strong>
+              <span>纯静态页面能否直连 API，取决于目标服务是否允许浏览器跨域请求。</span>
+            </div>
+            <div>
+              <strong>密钥提醒</strong>
+              <span>API Key 只会留在当前浏览器；公开部署时不要把平台主密钥写进前端代码。</span>
+            </div>
+          </aside>
+        </section>
+
+        <section class="history-panel" aria-label="请求历史">
+          <div class="panel-heading compact">
+            <div>
+              <h2>历史</h2>
+              <p>最近 8 次本地请求</p>
+            </div>
+            <button class="ghost-button small" id="clearHistoryButton" type="button">清空</button>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js"></script>
+  </body>
+</html>
