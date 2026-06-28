@@ -1,23 +1,26 @@
 :root {
   color-scheme: light;
-  --bg: #f6f7f8;
-  --panel: #ffffff;
-  --panel-soft: #f0f4f7;
-  --text: #16202a;
-  --muted: #667382;
-  --line: #dce3e9;
-  --line-strong: #c6d1da;
-  --accent: #0f8b8d;
-  --accent-dark: #08696d;
-  --accent-soft: #dff3f2;
-  --blue: #2662d9;
-  --green: #16825d;
-  --amber: #b86900;
-  --red: #c33434;
-  --shadow: 0 18px 55px rgba(27, 43, 57, 0.12);
-  --radius: 8px;
+  --bg: #f3efe5;
+  --paper: #f8f5ee;
+  --panel: rgba(255, 255, 255, 0.74);
+  --panel-solid: #fffefa;
+  --panel-soft: #eee8dc;
+  --text: #1f2430;
+  --muted: #6a6f7b;
+  --line: rgba(31, 36, 48, 0.12);
+  --line-strong: rgba(31, 36, 48, 0.22);
+  --accent: #1f2430;
+  --accent-dark: #11151d;
+  --accent-soft: #eee8dc;
+  --blue: #415a63;
+  --status: #6a6f7b;
+  --amber: #9b6c3f;
+  --red: #a84a42;
+  --shadow: 0 16px 50px rgba(28, 34, 44, 0.08);
+  --radius: 22px;
+  --control-radius: 14px;
   --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
-  --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --sans: "Noto Serif SC", "Source Han Serif SC", "Songti SC", "STSong", Georgia, serif;
 }
 
 * {
@@ -32,9 +35,10 @@ body {
   margin: 0;
   min-height: 100%;
   background:
-    linear-gradient(135deg, rgba(15, 139, 141, 0.10), transparent 34%),
-    linear-gradient(315deg, rgba(38, 98, 217, 0.08), transparent 32%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(238, 232, 220, 0.46)),
+    linear-gradient(90deg, rgba(31, 36, 48, 0.035) 0 1px, transparent 1px 100%),
     var(--bg);
+  background-size: auto, 34px 34px, auto;
   color: var(--text);
   font-family: var(--sans);
   letter-spacing: 0;
@@ -91,17 +95,17 @@ svg {
   width: 46px;
   height: 46px;
   padding: 8px;
-  border: 1px solid rgba(15, 139, 141, 0.26);
-  border-radius: var(--radius);
-  background: linear-gradient(145deg, #ffffff, #e4f2f1);
-  box-shadow: 0 10px 26px rgba(15, 139, 141, 0.16);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow);
 }
 
 .brand-mark span {
   align-self: end;
   display: block;
-  border-radius: 3px;
-  background: var(--accent);
+  border-radius: 999px 999px 4px 4px;
+  background: #1f2430;
 }
 
 .brand-mark span:nth-child(1) {
@@ -110,12 +114,12 @@ svg {
 
 .brand-mark span:nth-child(2) {
   height: 25px;
-  background: var(--blue);
+  background: #6a6f7b;
 }
 
 .brand-mark span:nth-child(3) {
   height: 19px;
-  background: var(--amber);
+  background: #d0b493;
 }
 
 h1,
@@ -125,15 +129,15 @@ p {
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 26px;
   line-height: 1.15;
-  font-weight: 760;
+  font-weight: 500;
 }
 
 h2 {
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.25;
-  font-weight: 740;
+  font-weight: 500;
 }
 
 .brand p,
@@ -166,9 +170,9 @@ h2 {
 .request-panel,
 .result-panel,
 .history-panel {
-  border: 1px solid rgba(198, 209, 218, 0.86);
+  border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--panel);
   box-shadow: var(--shadow);
   backdrop-filter: blur(18px);
 }
@@ -212,7 +216,7 @@ h2 {
   border: 1px solid var(--line);
   border-radius: 999px;
   background: var(--panel-soft);
-  color: var(--muted);
+  color: var(--accent);
   font-size: 12px;
   white-space: nowrap;
 }
@@ -221,8 +225,8 @@ h2 {
   width: 8px;
   height: 8px;
   border-radius: 999px;
-  background: var(--green);
-  box-shadow: 0 0 0 4px rgba(22, 130, 93, 0.14);
+  background: var(--status);
+  box-shadow: 0 0 0 4px rgba(31, 36, 48, 0.08);
 }
 
 .control-grid {
@@ -244,9 +248,9 @@ h2 {
 
 .field > span,
 .switch-field span {
-  color: #314252;
+  color: var(--text);
   font-size: 12px;
-  font-weight: 720;
+  font-weight: 500;
 }
 
 input,
@@ -255,8 +259,8 @@ textarea {
   width: 100%;
   min-width: 0;
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: #fbfcfd;
+  border-radius: var(--control-radius);
+  background: rgba(255, 255, 255, 0.74);
   color: var(--text);
   outline: none;
   transition: border-color 140ms ease, box-shadow 140ms ease, background-color 140ms ease;
@@ -278,8 +282,8 @@ input:focus,
 select:focus,
 textarea:focus {
   border-color: var(--accent);
-  background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(15, 139, 141, 0.14);
+  background: var(--panel-solid);
+  box-shadow: 0 0 0 4px rgba(31, 36, 48, 0.10);
 }
 
 .secret-row,
@@ -295,15 +299,15 @@ textarea:focus {
 
 .inline-input {
   border: 1px solid var(--line-strong);
-  border-radius: var(--radius);
-  background: #fbfcfd;
+  border-radius: var(--control-radius);
+  background: rgba(255, 255, 255, 0.74);
   padding-right: 12px;
 }
 
 .inline-input:focus-within {
   border-color: var(--accent);
-  background: #ffffff;
-  box-shadow: 0 0 0 4px rgba(15, 139, 141, 0.14);
+  background: var(--panel-solid);
+  box-shadow: 0 0 0 4px rgba(31, 36, 48, 0.10);
 }
 
 .inline-input input {
@@ -323,7 +327,7 @@ textarea:focus {
   min-height: 42px;
   padding: 0 12px;
   border: 1px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: var(--control-radius);
   background: var(--panel-soft);
 }
 
@@ -342,7 +346,7 @@ textarea:focus {
   justify-content: center;
   gap: 8px;
   min-height: 40px;
-  border-radius: var(--radius);
+  border-radius: var(--control-radius);
   cursor: pointer;
   transition: transform 120ms ease, box-shadow 120ms ease, background-color 120ms ease, border-color 120ms ease;
   user-select: none;
@@ -360,8 +364,8 @@ textarea:focus {
   padding: 0 18px;
   background: var(--accent);
   color: #ffffff;
-  box-shadow: 0 12px 24px rgba(15, 139, 141, 0.22);
-  font-weight: 760;
+  box-shadow: 0 12px 26px rgba(31, 36, 48, 0.18);
+  font-weight: 500;
 }
 
 .primary-button:hover {
@@ -372,9 +376,9 @@ textarea:focus {
 .ghost-button {
   padding: 0 13px;
   border: 1px solid var(--line-strong);
-  background: #ffffff;
-  color: #243443;
-  font-weight: 700;
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--text);
+  font-weight: 500;
 }
 
 .secondary-button:hover,
@@ -389,7 +393,7 @@ textarea:focus {
 }
 
 .ghost-button {
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.54);
 }
 
 .ghost-button.small {
@@ -403,8 +407,8 @@ textarea:focus {
   width: 40px;
   min-width: 40px;
   border: 1px solid var(--line-strong);
-  background: #ffffff;
-  color: #314252;
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--text);
 }
 
 .icon-button:hover {
@@ -425,13 +429,13 @@ textarea:focus {
   display: grid;
   gap: 4px;
   padding: 14px 12px;
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.62);
 }
 
 .metric-strip span {
   color: var(--muted);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .metric-strip strong {
@@ -456,13 +460,13 @@ textarea:focus {
   background: transparent;
   color: var(--muted);
   cursor: pointer;
-  font-weight: 740;
+  font-weight: 500;
 }
 
 .tab-button.active {
   border-color: var(--line-strong);
-  border-bottom-color: #ffffff;
-  background: #ffffff;
+  border-bottom-color: var(--panel-solid);
+  background: var(--panel-solid);
   color: var(--accent-dark);
 }
 
@@ -483,8 +487,8 @@ textarea:focus {
   padding: 16px;
   border: 1px solid var(--line-strong);
   border-radius: 0 var(--radius) var(--radius) var(--radius);
-  background: #101820;
-  color: #eaf2f4;
+  background: #1f2430;
+  color: #f5f2ea;
   font-family: var(--mono);
   font-size: 13px;
   line-height: 1.62;
@@ -493,8 +497,8 @@ textarea:focus {
 }
 
 #tab-answer .output-block {
-  background: #ffffff;
-  color: #1c2935;
+  background: rgba(255, 255, 255, 0.70);
+  color: var(--text);
 }
 
 .info-band {
@@ -512,12 +516,12 @@ textarea:focus {
   display: grid;
   gap: 6px;
   padding: 13px 14px;
-  background: #f7fafb;
+  background: rgba(255, 255, 255, 0.62);
 }
 
 .info-band strong {
   font-size: 12px;
-  color: #263747;
+  color: var(--text);
 }
 
 .info-band span {
@@ -549,7 +553,7 @@ textarea:focus {
   padding: 12px;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.62);
   color: inherit;
   text-align: left;
   cursor: pointer;
@@ -575,7 +579,7 @@ textarea:focus {
 .history-item p {
   grid-column: 1 / -1;
   overflow: hidden;
-  color: #314252;
+  color: var(--text);
   font-size: 12px;
   line-height: 1.4;
   text-overflow: ellipsis;
@@ -589,11 +593,11 @@ textarea:focus {
   z-index: 10;
   max-width: min(380px, calc(100vw - 44px));
   padding: 12px 14px;
-  border: 1px solid rgba(22, 130, 93, 0.25);
+  border: 1px solid rgba(31, 36, 48, 0.18);
   border-radius: var(--radius);
-  background: #ffffff;
-  color: #1e352d;
-  box-shadow: 0 16px 38px rgba(25, 42, 52, 0.18);
+  background: var(--panel-solid);
+  color: var(--accent-dark);
+  box-shadow: var(--shadow);
   font-size: 13px;
   opacity: 0;
   pointer-events: none;

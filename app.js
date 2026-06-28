@@ -16,7 +16,7 @@
     stream: "false",
     rememberKey: false,
     systemPrompt: "你是一个严谨、简洁的助手。",
-    userPrompt: "请用三句话介绍一下 OpenAI-Compatible API 的基本调用方式。",
+    userPrompt: "大模型的skill具体调用原理是什么",
     extraJson: ""
   };
 
@@ -512,7 +512,7 @@
     fields.reasoningEffort.value = "";
     fields.stream.value = "true";
     fields.systemPrompt.value = "你是一个适合接口联调的助手，回答要短、清楚、可验证。";
-    fields.userPrompt.value = "请返回一个包含 title、summary、next_steps 的简短中文说明。";
+    fields.userPrompt.value = "大模型的skill具体调用原理是什么";
     fields.extraJson.value = '{\n  "top_p": 0.9\n}';
     saveSettings();
     updateRequestPreview();
